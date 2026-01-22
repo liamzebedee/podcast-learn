@@ -4,7 +4,7 @@
 
 3. Copy the transcript and remove the timestamps and join it into one long string. Save to raw_transcript.md.
 
-4. Convert the transcript into a formatted transcript "article" - with paragraphs, semantic breaks, formatting (bold for key terms, italic for quotes). Save to article.mdhttps://www.youtube.com/watch?v=8jN60eJr4Ps
+4. Convert the transcript into a formatted transcript "article" - with paragraphs, semantic breaks, formatting (bold for key terms, italic for quotes). Save to article.md
 
 5. Analyse the transcript with up to 500 parallel subagents. Understand the core ideas. Generate a file analysis.md.
 

@@ -4,6 +4,7 @@ Automatically updates the README.md with a table of all analyzed interviews.
 """
 
 import os
+from datetime import datetime
 from pathlib import Path
 
 WORKS_DIR = Path(__file__).parent.parent / "works"
@@ -55,13 +56,21 @@ def get_interviews() -> list[dict]:
         analysis_compressed = work_dir / "analysis_compressed.md"
         analysis = work_dir / "analysis.md"
 
+        # Get date from folder modification time
+        mtime = work_dir.stat().st_mtime
+        date = datetime.fromtimestamp(mtime)
+
         interviews.append({
             "title": title,
             "youtube_url": youtube_url,
             "folder": work_dir.name,
             "has_analysis_compressed": analysis_compressed.exists(),
             "has_analysis": analysis.exists(),
+            "date": date,
         })
+
+    # Sort by date, newest first
+    interviews.sort(key=lambda x: x["date"], reverse=True)
 
     return interviews
 
@@ -69,11 +78,14 @@ def get_interviews() -> list[dict]:
 def generate_table(interviews: list[dict]) -> str:
     """Generate markdown table from interview data."""
     lines = [
-        "| Interview | YouTube | Core Ideas | Full Analysis |",
-        "|-----------|---------|------------|---------------|",
+        "| Date | Interview | YouTube | Core Ideas | Full Analysis |",
+        "|------|-----------|---------|------------|---------------|",
     ]
 
     for interview in interviews:
+        # Format date as YYYY-MM-DD
+        date_str = interview["date"].strftime("%Y-%m-%d")
+
         # Escape pipe characters which break markdown tables
         escaped_title = interview['title'].replace("|", "\\|")
         title = f"**{escaped_title}**"
@@ -95,7 +107,7 @@ def generate_table(interviews: list[dict]) -> str:
         else:
             full_analysis = "-"
 
-        lines.append(f"| {title} | {youtube} | {core_ideas} | {full_analysis} |")
+        lines.append(f"| {date_str} | {title} | {youtube} | {core_ideas} | {full_analysis} |")
 
     return "\n".join(lines)
 

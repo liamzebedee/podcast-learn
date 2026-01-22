@@ -13,6 +13,11 @@ TABLE_START_MARKER = "<!-- INTERVIEWS_TABLE_START -->"
 TABLE_END_MARKER = "<!-- INTERVIEWS_TABLE_END -->"
 
 
+def folder_name_to_title(folder_name: str) -> str:
+    """Convert a folder name like 'michael-levin-tim-ferriss' to 'Michael Levin Tim Ferriss'."""
+    return folder_name.replace("-", " ").title()
+
+
 def parse_readme_txt(readme_path: Path) -> dict:
     """Parse a readme.txt file and return metadata dict."""
     metadata = {}
@@ -44,7 +49,7 @@ def get_interviews() -> list[dict]:
 
         metadata = parse_readme_txt(readme_txt)
 
-        title = metadata.get("Title", work_dir.name)
+        title = metadata.get("Title") or folder_name_to_title(work_dir.name)
         youtube_url = metadata.get("YouTube URL", "")
 
         analysis_compressed = work_dir / "analysis_compressed.md"

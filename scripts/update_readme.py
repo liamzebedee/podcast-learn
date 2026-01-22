@@ -74,7 +74,9 @@ def generate_table(interviews: list[dict]) -> str:
     ]
 
     for interview in interviews:
-        title = f"**{interview['title']}**"
+        # Escape pipe characters which break markdown tables
+        escaped_title = interview['title'].replace("|", "\\|")
+        title = f"**{escaped_title}**"
 
         if interview["youtube_url"]:
             youtube = f"[Link]({interview['youtube_url']})"
